@@ -1,2 +1,10 @@
+#!/usr/bin/env bash
+
+echo "-> Installing bundler gem"
+gem install bundler
+
+echo "-> Installing gem dependencies with bundler"
 bundle install
+
+echo "-> Executing deploy step"
 bundle exec thor gh:tag

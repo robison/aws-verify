@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-echo "Installing bundler gem"
+echo "-> Installing bundler gem"
 gem install bundler
 
-echo "Installing gem dependencies with bundler"
+echo "-> Installing gem dependencies with bundler"
 bundle install
 
-echo "Executing deploy step"
+echo "-> Executing deploy step"
 bundle exec thor version:bump auto --default patch
