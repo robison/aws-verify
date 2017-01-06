@@ -20,28 +20,7 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rvm 2.2 do deploy/version
+    script: rvm 2.2 do deploy/all
     on:
       branch: master
       tags: false
-
-  - provider: script
-    skip_cleanup: true
-    script: rvm 2.2 do deploy/tag
-    on:
-      branch: master
-      tags: false
-
-  # - provider: script
-  #   skip_cleanup: true
-  #   script: bundle exec thor gox:build
-  #   on:
-  #     branch: master
-  #     tags: false
-  #
-  # - provider: script
-  #   skip_cleanup: true
-  #   script: bundle exec thor gh:upload
-  #   on:
-  #     branch: master
-  #     tags: false

@@ -39,7 +39,9 @@ module GitHub
 
     desc 'upload BUILD_DIR=build', 'Upload all artifacts in BUILD_DIR to the current GitHub release'
     def upload(build_dir = 'build')
-
+      Dir['deploy/*'].each do |artifact|
+        say_status :upload, artifact
+      end
     end
   end
 end
@@ -54,7 +56,7 @@ module Gox
     desc 'build BUILD_DIR=build', 'Perform a gox build, placing artifacts into BUILD_DIR'
     def build(build_dir = 'build')
       empty_directory build_dir
-      run "gox -output=#{build_dir}/{{.Dir}}-{{.OS}}-{{.Arch}}"
+      run "gox -output=#{build_dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}"
     end
   end
 end
