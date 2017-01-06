@@ -31,4 +31,4 @@ aws-verify
 build/
 *.sock
 
-VERSION
+/VERSION
