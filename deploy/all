@@ -12,8 +12,5 @@ bundle exec thor version:bump auto --default patch
 echo "-> Build package"
 bundle exec thor gox:build
 
-echo "-> Create GitHub release"
-bundle exec thor gh:tag
-
-echo "-> Upload build artifacts to release"
-bundle exec thor gh:upload
+echo "-> Create GitHub release and upload build artifacts"
+bundle exec thor gh:release
