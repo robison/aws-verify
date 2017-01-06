@@ -29,24 +29,27 @@ module GitHub
   class Commands < Thor
     namespace 'gh'
 
-    desc 'tag', 'Use the GitHub API to create a tagged release for the current version'
-    def tag
+    desc 'release BUILD_DIR=build', 'Upload all artifacts in BUILD_DIR to the current GitHub release'
+    def release(build_dir = 'build')
       say_status :tag, "Creating draft release #{GitHub.version} on #{GitHub.repo}"
-      GitHub.client.create_release(GitHub.repo, GitHub.version,
-                                   :target_commitish => GitHub.commit,
-                                   :draft => true)
-    end
+      handle = GitHub.client.create_release(GitHub.repo, GitHub.version,
+                                            :target_commitish => GitHub.commit,
+                                            :name => "aws-verify #{GitHub.version}",
+                                            :draft => true)
 
-    desc 'upload BUILD_DIR=build', 'Upload all artifacts in BUILD_DIR to the current GitHub release'
-    def upload(build_dir = 'build')
-      Dir['deploy/*'].each do |artifact|
+      Dir[File.join(build_dir, '*')].each do |artifact|
         say_status :upload, artifact
+        GitHub.client.upload_asset(handle.url, artifact,
+                                   :name => File.basename(artifact))
       end
     end
   end
 end
 
 module Gox
+  GOARCH = %w(amd64 386 arm).freeze
+  GOOS = %w(darwin linux windows).freeze
+
   ## Thor Commands
   class Commands < Thor
     include Thor::Actions
@@ -56,7 +59,12 @@ module Gox
     desc 'build BUILD_DIR=build', 'Perform a gox build, placing artifacts into BUILD_DIR'
     def build(build_dir = 'build')
       empty_directory build_dir
-      run "gox -output=#{build_dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}"
+      run [
+        'gox',
+        "-output=#{build_dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}",
+        %(-arch="#{GOARCH.join(' ')}"),
+        %(-os="#{GOOS.join(' ')}")
+      ].join(' ')
     end
   end
 end
