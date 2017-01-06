@@ -40,6 +40,7 @@ module GitHub
       Dir[File.join(build_dir, '*')].each do |artifact|
         say_status :upload, artifact
         GitHub.client.upload_asset(handle.url, artifact,
+                                   :content_type => 'application/octet-stream',
                                    :name => File.basename(artifact))
       end
     end
