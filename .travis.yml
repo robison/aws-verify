@@ -20,14 +20,14 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rvm 2.2.4 do deploy/version
+    script: rvm 2.2 do deploy/version
     on:
       branch: master
       tags: false
 
   - provider: script
     skip_cleanup: true
-    script: rvm 2.2.4 do deploy/tag
+    script: rvm 2.2 do deploy/tag
     on:
       branch: master
       tags: false
