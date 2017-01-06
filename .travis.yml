@@ -12,7 +12,6 @@ install:
   - go get github.com/mitchellh/gox
   - go get github.com/tools/godep
   - godep restore
-  - bundle install
 
 script:
   - go test
@@ -21,14 +20,14 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: thor version:bump auto --default patch
+    script: deploy/version
     on:
       branch: master
       tags: false
 
   - provider: script
     skip_cleanup: true
-    script: thor gh:tag
+    script: deploy/tag
     on:
       branch: master
       tags: false
