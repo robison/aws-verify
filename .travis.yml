@@ -21,14 +21,14 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: bundle exec thor version:bump auto --default patch
+    script: thor version:bump auto --default patch
     on:
       branch: master
       tags: false
 
   - provider: script
     skip_cleanup: true
-    script: bundle exec thor gh:tag
+    script: thor gh:tag
     on:
       branch: master
       tags: false

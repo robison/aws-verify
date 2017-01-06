@@ -26,7 +26,7 @@ module GitHub
   end
 
   ## Thor Commands
-  class Commands  < Thor
+  class Commands < Thor
     namespace 'gh'
 
     desc 'tag', 'Use the GitHub API to create a tagged release for the current version'
