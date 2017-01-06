@@ -1,0 +1,11 @@
+{
+	"ImportPath": "jmanero/aws-verify",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v75",
+	"Deps": [
+		{
+			"ImportPath": "github.com/fullsailor/pkcs7",
+			"Rev": "cedaa6c8ea14493515fcf950eabba5eb1530c349"
+		}
+	]
+}
