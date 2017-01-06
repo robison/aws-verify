@@ -1,4 +1,2 @@
-#!/usr/bin/env bash
-
 bundle install
 bundle exec thor version:bump auto --default patch
