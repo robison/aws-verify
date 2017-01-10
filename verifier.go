@@ -1,5 +1,6 @@
 package main
 
+import "errors"
 import "log"
 import "net/http"
 
@@ -49,38 +50,47 @@ type Verifier struct {
 /**
  * Read a PEM-encoded x509 certificate from a file and add to signing candidates
  */
-func (verify *Verifier) ReadPEMCertificate(path string) {
+func (verify *Verifier) ReadPEMCertificate(path string) (*x509.Certificate, error) {
 	log.Printf("Loading certificate from %s", path)
 
 	data, err := ioutil.ReadFile(path)
-	fatal(err)
+	if err != nil {
+		return nil, err
+	}
 
-	verify.AddPEMCertificate(data)
+	return verify.AddPEMCertificate(data)
 }
 
 /**
  * Parse a PEM-encoded x509 certificate and add to signing candidates
  */
-func (verify *Verifier) AddPEMCertificate(data []byte) {
+func (verify *Verifier) AddPEMCertificate(data []byte) (*x509.Certificate, error) {
 	block, _ := pem.Decode(data)
+	if block == nil {
+		return nil, errors.New("Invalid PEM data. Unable to parse certificate!")
+	}
 
 	certificate, err := x509.ParseCertificate(block.Bytes)
-	fatal(err)
+	if err != nil {
+		return nil, err
+	}
 
-	verify.AddCertificate(certificate)
+	return verify.AddCertificate(certificate), nil
 }
 
 /**
  * Add a certificate to the Verifier's signing candidates
  */
-func (verify *Verifier) AddCertificate(certificate *x509.Certificate) {
+func (verify *Verifier) AddCertificate(certificate *x509.Certificate) *x509.Certificate {
 	log.Printf("Adding certificate %s, %s, %s to singing candidates",
-		certificate.Subject.Organization,
-		certificate.Subject.Province,
-		certificate.Subject.Country,
+		certificate.Subject.Organization[0],
+		certificate.Subject.Province[0],
+		certificate.Subject.Country[0],
 	)
 
 	verify.certificates = append(verify.certificates, certificate)
+
+	return certificate
 }
 
 /**

@@ -4,6 +4,9 @@ import "flag"
 import "log"
 import "strings"
 
+/**
+ * Helper to panic on a returned error during setup
+ */
 func fatal(err error) {
 	if err != nil {
 		log.Fatal(err)
@@ -20,13 +23,17 @@ func main() {
 	// Use the default Amazon certificate if none are specified in command arguments
 	if len(*certificates) == 0 {
 		log.Printf("Using default Amazon AWS signing certificate")
-		handler.AddPEMCertificate(AMAZON_PUBLIC_CLOUD)
+		_, err := handler.AddPEMCertificate(AMAZON_PUBLIC_CLOUD)
+
+		fatal(err)
 	}
 
 	// Load certificates from specified file
 	for _, path := range strings.Split(*certificates, ",") {
 		if len(path) > 0 {
-			handler.ReadPEMCertificate(path)
+			_, err := handler.ReadPEMCertificate(path)
+
+			fatal(err)
 		}
 	}
 
