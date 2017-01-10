@@ -1,7 +1,6 @@
 package main
 
 import "errors"
-import "log"
 import "io/ioutil"
 import "net/http"
 
@@ -45,22 +44,12 @@ func (request *Request) Read(r *http.Request) (err error) {
  * Parse the Request's PEM encoded Signature field into a PKCS7 instance
  * and attach a set of x509 signing candidates for later verification
  */
-func (request *Request) Parse(certificates []*x509.Certificate) (err error) {
-	/*
-	 * Catch panics from `pem.Decode` and `pkcs7.Parse`
-	 *
-	 * Send a generic error message back to the client, and log the panic message
-	 * for later debugging.
-	 */
-	defer func() {
-		if r := recover(); r != nil {
-			log.Printf("Panic parsing PKCS7 PEM block in request: %s", r)
-			err = errors.New("Error parsing PKCS7 PEM block")
-		}
-	}()
-
+func (request *Request) Parse(certificates []*x509.Certificate) error {
 	// Extract ANS1 from the PEM block
 	block, _ := pem.Decode(request.Signature)
+	if block == nil {
+		return errors.New("Invalid PEM data. Unable to parse certificate!")
+	}
 
 	// Parse the ASN1 object into a PKCS7 instance
 	p7, err := pkcs7.Parse(block.Bytes)
