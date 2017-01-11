@@ -31,4 +31,5 @@ aws-verify
 build/
 *.sock
 
+/coverage
 /VERSION
