@@ -9,18 +9,18 @@ env:
     - secure: "G9CBcMtHy6fPLA/i/LbupNbxSReme/i3oAUc9I6JBvchs4EzAMwY3w7QA6vBfQ4GKeA2ueb2GD5FZBPap1nyOr3VZ0zoV03s97G7bc42L2uT+AYGXhk6MAvxJ4ROz6WTlrhH75+NAUD/khpByeex+mjTuxM6ers2wGTa5PbJM7elmGNuUPj+fTEhlY4vqvh/E2tG2CXlBkkvbujVS9ayRq0JCZTajgpSy2r744zQkYE1CBTVtABPhbfHHB1vnEhklBy0jtZeZxOKP+OY1LAL9HD/0gHAN8H6TcvKAORDWQf6SK+pYfQS5NVpKfW1SZkANDyhz2Ste4V/Jfkz1UJ4jv+3J7iNjNtJ5Hrf/C16g6P6oMmmepPLmuAcsQUgxIBMz/6m+Y0248/CrkQebqxBC5/2qpuJVnxzRrcuQeDMR+Y/YLVmw7lsmfx0RtmA7Qkj0tZweq9rNGtxdqzuF6mIWc2AJ4jxNnmIBvOWmEaDKvczIre5y/CFCBz1Lygdpc3WkMwPpoY9uHJ4WXU/HDAWL8OYYpCtgsj7MCsoxqCPFjU51q5k4MZKGqTt41hKJYsqYcI+Un/tlTdE1UALQd49qTpzU8/4bdyrNsMqAivvM4/nJLimGnFsG5emozswsVNU2kgmXnaLVM4bEQiRdAVIwPGi/VIpbnzQB6oqAzlmWIo="
 
 install:
-  - go get github.com/mitchellh/gox
+  - go get github.com/golang/lint/golint
   - go get github.com/tools/godep
   - godep restore
 
 script:
   - go test
-  - go vet
+  - golint
 
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rvm 2.2 do deploy/all
+    script: rvm 2.2 do scripts/deploy
     on:
       branch: master
       tags: false
