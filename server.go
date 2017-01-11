@@ -8,9 +8,7 @@ import "os/signal"
 import "syscall"
 import "time"
 
-/**
- * Create a new instance of an HTTP server
- */
+// CreateServer creates a new instance of an HTTP server
 func CreateServer(socket string, mode os.FileMode, handler http.Handler) *Server {
 	return &Server{
 		server: &http.Server{
@@ -24,9 +22,7 @@ func CreateServer(socket string, mode os.FileMode, handler http.Handler) *Server
 	}
 }
 
-/**
- * Configuration and handles for an HTTP server
- */
+// Server configuration and handle for an HTTP server
 type Server struct {
 	listener net.Listener
 	server   *http.Server
@@ -36,9 +32,7 @@ type Server struct {
 	mode		os.FileMode
 }
 
-/**
- * Create listener and attach HTTP server to it
- */
+// Listen creates a UNIX listener and attaches an HTTP server to it
 func (s *Server) Listen() error {
 	listener, err := net.Listen("unix", s.socket)
 	if err != nil {
@@ -73,9 +67,7 @@ func (s *Server) Listen() error {
 	return nil
 }
 
-/**
- * Close the listener and clean up it's socket handle
- */
+// Close closes the UNIX listener and cleans up it's socket handle
 func (s *Server) Close() {
 	log.Printf("Closing server and cleaning up socket %s", s.socket)
 
