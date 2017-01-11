@@ -8,11 +8,9 @@ import "encoding/pem"
 import "crypto/x509"
 import "io/ioutil"
 
-/**
- * The global public certificate used by Amazon to generate EC2
- * identity signatures
- */
-var AMAZON_PUBLIC_CLOUD = []byte(`-----BEGIN CERTIFICATE-----
+// AmazonAWSCloudSigner is the global public certificate used by Amazon to
+// generate EC2 identity signatures
+var AmazonAWSCloudSigner = []byte(`-----BEGIN CERTIFICATE-----
 MIIC7TCCAq0CCQCWukjZ5V4aZzAJBgcqhkjOOAQDMFwxCzAJBgNVBAYTAlVTMRkw
 FwYDVQQIExBXYXNoaW5ndG9uIFN0YXRlMRAwDgYDVQQHEwdTZWF0dGxlMSAwHgYD
 VQQKExdBbWF6b24gV2ViIFNlcnZpY2VzIExMQzAeFw0xMjAxMDUxMjU2MTJaFw0z
@@ -32,24 +30,19 @@ vSeDCOUMYQR7R9LINYwouHIziqQYMAkGByqGSM44BAMDLwAwLAIUWXBlk40xTwSw
 -----END CERTIFICATE-----
 `)
 
-/**
- * Create a Verifier instance
- */
+// CreateVerifier creates a Verifier instance
 func CreateVerifier() *Verifier {
 	return &Verifier{}
 }
 
-/**
- * A custom `http.Handler` for verifying AWS EC2 instance identity document
- * signatures
- */
+// Verifier is a custom `http.Handler` for verifying AWS EC2 instance
+// identity document signatures
 type Verifier struct {
 	certificates []*x509.Certificate
 }
 
-/**
- * Read a PEM-encoded x509 certificate from a file and add to signing candidates
- */
+// ReadPEMCertificate reads a PEM-encoded x509 certificate from a file and
+// adds id to the set of signing candidates
 func (verify *Verifier) ReadPEMCertificate(path string) (*x509.Certificate, error) {
 	log.Printf("Loading certificate from %s", path)
 
@@ -61,13 +54,12 @@ func (verify *Verifier) ReadPEMCertificate(path string) (*x509.Certificate, erro
 	return verify.AddPEMCertificate(data)
 }
 
-/**
- * Parse a PEM-encoded x509 certificate and add to signing candidates
- */
+// AddPEMCertificate parses a PEM-encoded x509 certificate from a byte array
+// and adds it to the set of signing candidates
 func (verify *Verifier) AddPEMCertificate(data []byte) (*x509.Certificate, error) {
 	block, _ := pem.Decode(data)
 	if block == nil {
-		return nil, errors.New("Invalid PEM data. Unable to parse certificate!")
+		return nil, errors.New("invalid PEM data. Unable to parse certificate")
 	}
 
 	certificate, err := x509.ParseCertificate(block.Bytes)
@@ -78,9 +70,8 @@ func (verify *Verifier) AddPEMCertificate(data []byte) (*x509.Certificate, error
 	return verify.AddCertificate(certificate), nil
 }
 
-/**
- * Add a certificate to the Verifier's signing candidates
- */
+// AddCertificate adds an x509.Certificate instance to the Verifier's
+// set of signing candidates
 func (verify *Verifier) AddCertificate(certificate *x509.Certificate) *x509.Certificate {
 	log.Printf("Adding certificate %s, %s, %s to singing candidates",
 		certificate.Subject.Organization[0],
@@ -93,10 +84,8 @@ func (verify *Verifier) AddCertificate(certificate *x509.Certificate) *x509.Cert
 	return certificate
 }
 
-/**
- * Check for an error value and respond immediately with the specified status
- * code and the error's message, returning `false`
- */
+// OK check for an error value and responds immediately with the specified
+// status code and the error's message, returning `false` if it is not nil.
 func (*Verifier) OK(err error, code int, w http.ResponseWriter) bool {
 	if err == nil {
 		return true
@@ -109,9 +98,7 @@ func (*Verifier) OK(err error, code int, w http.ResponseWriter) bool {
 	return false
 }
 
-/**
- * `http.Handler` interface. Handle incoming requests.
- */
+// ServeHTTP implements the `http.Handler` interface
 func (verify *Verifier) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
