@@ -12,7 +12,6 @@ func NewResponse(code int, success bool) *Response {
 	}
 }
 
-
 // Response is an interface for the JSON response to verification requests
 type Response struct {
 	V        string                 `json:"v"`

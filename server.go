@@ -18,7 +18,7 @@ func CreateServer(socket string, mode os.FileMode, handler http.Handler) *Server
 		},
 
 		socket: socket,
-		mode: mode,
+		mode:   mode,
 	}
 }
 
@@ -28,8 +28,8 @@ type Server struct {
 	server   *http.Server
 	shutdown chan os.Signal
 
-	socket   string
-	mode		os.FileMode
+	socket string
+	mode   os.FileMode
 }
 
 // Listen creates a UNIX listener and attaches an HTTP server to it
