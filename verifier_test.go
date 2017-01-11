@@ -20,7 +20,7 @@ func TestCreateVerifier(t *testing.T) {
 
 func TestAddPEMCertificate(t *testing.T) {
 	verify := CreateVerifier()
-  certificate, err := verify.AddPEMCertificate(AMAZON_PUBLIC_CLOUD)
+  certificate, err := verify.AddPEMCertificate(AmazonAWSCloudSigner)
 
 	assert.Equal(t, 1, len(verify.certificates), "Adds a certificate to the verifier")
   assert.Equal(t, "Amazon Web Services LLC", certificate.Subject.Organization[0], "Read the correct certificate")
@@ -75,7 +75,7 @@ func TestOK(t *testing.T) {
 
 func TestServeHTTP(t *testing.T) {
   verify := CreateVerifier()
-  _, err := verify.AddPEMCertificate(AMAZON_PUBLIC_CLOUD)
+  _, err := verify.AddPEMCertificate(AmazonAWSCloudSigner)
   assert.Nil(t, err)
 
   signature, err := os.Open("./testdata/valid-signature.pem")

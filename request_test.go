@@ -23,7 +23,7 @@ func TestNewRequest(t *testing.T) {
 
 func TestParse(t *testing.T) {
   verify := CreateVerifier()
-  _, err := verify.AddPEMCertificate(AMAZON_PUBLIC_CLOUD)
+  _, err := verify.AddPEMCertificate(AmazonAWSCloudSigner)
   assert.Nil(t, err)
 
   signature, err := os.Open("./testdata/valid-signature.pem")
@@ -48,7 +48,7 @@ func TestParse(t *testing.T) {
 
 func TestVerify(t *testing.T) {
   verify := CreateVerifier()
-  _, err := verify.AddPEMCertificate(AMAZON_PUBLIC_CLOUD)
+  _, err := verify.AddPEMCertificate(AmazonAWSCloudSigner)
   assert.Nil(t, err)
 
   signature, err := os.Open("./testdata/valid-signature.pem")
