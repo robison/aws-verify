@@ -10,8 +10,8 @@ env:
 
 install:
   - go get github.com/golang/lint/golint
-  - go get github.com/tools/godep
-  - godep restore
+  - go get github.com/kardianos/govendor
+  - govendor install +local
 
 script:
   - go test
