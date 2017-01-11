@@ -11,10 +11,10 @@ env:
 install:
   - go get github.com/golang/lint/golint
   - go get github.com/kardianos/govendor
-  - govendor install +local
+  - govendor install
 
 script:
-  - go test
+  - govendor test
   - golint
 
 deploy:
