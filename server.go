@@ -11,14 +11,16 @@ import "time"
 /**
  * Create a new instance of an HTTP server
  */
-func CreateServer(socket string, handler http.Handler) *Server {
+func CreateServer(socket string, mode os.FileMode, handler http.Handler) *Server {
 	return &Server{
 		server: &http.Server{
 			Handler:      handler,
 			ReadTimeout:  time.Second,
 			WriteTimeout: time.Second,
 		},
+
 		socket: socket,
+		mode: mode,
 	}
 }
 
@@ -28,18 +30,29 @@ func CreateServer(socket string, handler http.Handler) *Server {
 type Server struct {
 	listener net.Listener
 	server   *http.Server
-	socket   string
 	shutdown chan os.Signal
+
+	socket   string
+	mode		os.FileMode
 }
 
 /**
  * Create listener and attach HTTP server to it
  */
-func (s *Server) Listen() {
+func (s *Server) Listen() error {
 	listener, err := net.Listen("unix", s.socket)
-	fatal(err)
+	if err != nil {
+		return err
+	}
 
 	s.listener = listener
+
+	err = os.Chmod(s.socket, s.mode)
+	if err != nil {
+		s.Close()
+		return err
+	}
+
 	s.shutdown = make(chan os.Signal, 1)
 
 	// Set up a deferred cleanup routine
@@ -56,6 +69,8 @@ func (s *Server) Listen() {
 	s.server.Serve(listener)
 
 	log.Printf("Goodbye")
+
+	return nil
 }
 
 /**
