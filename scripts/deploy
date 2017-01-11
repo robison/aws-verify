@@ -3,6 +3,9 @@
 echo "-> Installing bundler gem"
 gem install bundler
 
+echo "-> Installing gox from github.com/mitchellh/gox"
+go get github.com/mitchellh/gox
+
 echo "-> Installing gem dependencies with bundler"
 bundle install
 
