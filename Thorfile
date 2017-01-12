@@ -47,9 +47,24 @@ module GitHub
   end
 end
 
+## gox Helpers
 module Gox
   GOARCH = %w(amd64 386 arm).freeze
   GOOS = %w(darwin linux windows).freeze
+
+  class << self
+    def output
+      "-output=#{build_dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}"
+    end
+
+    def arch
+      %(-arch="#{GOARCH.join(' ')}")
+    end
+
+    def os
+      %(-os="#{GOOS.join(' ')}")
+    end
+  end
 
   ## Thor Commands
   class Commands < Thor
@@ -57,15 +72,15 @@ module Gox
 
     namespace 'gox'
 
+    desc 'install', 'Install github.com/mitchellh/gox'
+    def install
+      run 'go get github.com/mitchellh/gox'
+    end
+
     desc 'build BUILD_DIR=build', 'Perform a gox build, placing artifacts into BUILD_DIR'
     def build(build_dir = 'build')
       empty_directory build_dir
-      run [
-        'gox',
-        "-output=#{build_dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}",
-        %(-arch="#{GOARCH.join(' ')}"),
-        %(-os="#{GOOS.join(' ')}")
-      ].join(' ')
+      run ['gox', Gox.output, Gox.arch, Gox.os].join(' ')
     end
   end
 end

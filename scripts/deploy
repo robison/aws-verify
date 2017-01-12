@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
+set -e
 
 echo "-> Installing bundler gem"
 gem install bundler
-
-echo "-> Installing gox from github.com/mitchellh/gox"
-go get github.com/mitchellh/gox
 
 echo "-> Installing gem dependencies with bundler"
 bundle install
@@ -13,6 +11,7 @@ echo "-> Bump package version"
 bundle exec thor version:bump auto --default patch
 
 echo "-> Build package"
+bundle exec thor gox:install
 bundle exec thor gox:build
 
 echo "-> Create GitHub release and upload build artifacts"
