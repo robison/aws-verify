@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+mkdir -p coverage
+go test -coverprofile=coverage/report ${@}
+go tool cover -html=coverage/report -o coverage/index.html

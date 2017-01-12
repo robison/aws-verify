@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+__dirname__=$(dirname "$0")
+
+curl --unix-socket ./aws-verify.sock http://localhost --data-binary @${__dirname__}/valid-signature.pem
