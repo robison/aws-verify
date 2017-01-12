@@ -11,6 +11,7 @@ env:
 install:
   - go get github.com/golang/lint/golint
   - go get github.com/kardianos/govendor
+  - go get github.com/mitchellh/gox
   - govendor install
 
 script:

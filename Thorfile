@@ -72,11 +72,6 @@ module Gox
 
     namespace 'gox'
 
-    desc 'install', 'Install github.com/mitchellh/gox'
-    def install
-      run 'go get github.com/mitchellh/gox'
-    end
-
     desc 'build BUILD_DIR=build', 'Perform a gox build, placing artifacts into BUILD_DIR'
     def build(build_dir = 'build')
       empty_directory build_dir
