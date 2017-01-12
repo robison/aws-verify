@@ -50,7 +50,7 @@ end
 ## gox Helpers
 module Gox
   GOARCH = %w(amd64 386 arm).freeze
-  GOOS = %w(darwin linux windows).freeze
+  GOOS = %w(darwin linux).freeze
 
   class << self
     def output(dir)
