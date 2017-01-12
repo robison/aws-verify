@@ -53,8 +53,8 @@ module Gox
   GOOS = %w(darwin linux windows).freeze
 
   class << self
-    def output
-      "-output=#{build_dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}"
+    def output(dir)
+      "-output=#{dir}/{{.Dir}}-#{GitHub.version}-{{.OS}}-{{.Arch}}"
     end
 
     def arch
@@ -75,7 +75,7 @@ module Gox
     desc 'build BUILD_DIR=build', 'Perform a gox build, placing artifacts into BUILD_DIR'
     def build(build_dir = 'build')
       empty_directory build_dir
-      run ['gox', Gox.output, Gox.arch, Gox.os].join(' ')
+      run ['gox', Gox.output(build_dir), Gox.arch, Gox.os].join(' ')
     end
   end
 end
