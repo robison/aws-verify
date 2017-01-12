@@ -11,7 +11,6 @@ echo "-> Bump package version"
 bundle exec thor version:bump auto --default patch
 
 echo "-> Build package"
-bundle exec thor gox:install
 bundle exec thor gox:build
 
 echo "-> Create GitHub release and upload build artifacts"
