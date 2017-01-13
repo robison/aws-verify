@@ -1,0 +1,27 @@
+{
+  "name": "aws-verify",
+  "version": "0.0.0",
+  "description": "Validate EC2 instance identity signatures",
+  "main": "lib",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint bin/* lib/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volcano-lair/aws-verify.git"
+  },
+  "author": "John Manero <john.manero@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/volcano-lair/aws-verify/issues"
+  },
+  "homepage": "https://github.com/volcano-lair/aws-verify#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^3.13.1",
+    "eslint-config-rapid7": "^2.6.0",
+    "mocha": "^3.2.0"
+  }
+}
